@@ -1,0 +1,7 @@
+Trade: {
+
+    type={FX_SPOT}
+
+    price={500}
+
+}

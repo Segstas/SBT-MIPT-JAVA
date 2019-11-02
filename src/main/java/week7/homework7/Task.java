@@ -4,9 +4,9 @@ import java.util.concurrent.Callable;
 
 public class Task<T> implements Runnable {
     private final Callable<? extends T> callable;
-    private boolean isCatchException = false;
-    private boolean isReadyForWork = true;
-    private T ansver;
+    private volatile boolean readyForThread = true;
+    private volatile boolean isFinished = false;
+    private T answer;
     private Exception callableException;
 
     Task(Callable<? extends T> callable) {
@@ -14,35 +14,51 @@ public class Task<T> implements Runnable {
     }
 
     private T get() {
-        if (isReadyForWork) {
-            synchronized (this) {
-                if (isReadyForWork) {
-                    try {
-                        ansver = callable.call();
-                        isCatchException = false;
-                    } catch (Exception e) {
-                        callableException = e;
-                        isCatchException = true;
-                    }
-                    isReadyForWork = false;
+        if (!isFinished) {
+            try {
+                lockThread();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (!isFinished) {
+                try {
+                    answer = callable.call();
+                } catch (Exception e) {
+                    callableException = e;
+                } finally {
+                    isFinished = true;
                 }
             }
-        } else {
             try {
-                this.wait();
+                unlockThread();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        if (!isCatchException) {
-            return ansver;
+        if (callableException == null) {
+            return answer;
         } else throw new RuntimeException("Exception in get method", callableException);
     }
 
-    @Override
     public void run() {
         System.out.println(this.get());
+    }
+
+    private void lockThread() throws InterruptedException {
+        synchronized (this) {
+            while (!readyForThread) {
+                this.wait();
+            }
+            readyForThread = false;
+        }
+    }
+
+    private void unlockThread() throws InterruptedException {
+        synchronized (this) {
+            readyForThread = true;
+            this.notify();
+        }
     }
 }
 

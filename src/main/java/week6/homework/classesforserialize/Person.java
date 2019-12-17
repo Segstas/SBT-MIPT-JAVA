@@ -1,4 +1,4 @@
-package week6.homework6.classesforserialize;
+package week9.homework.classesforserialize;
 
 public class Person {
     public String firstName;

@@ -1,8 +1,8 @@
-package week6.homework6.classesforserialize;
+package week9.homework.classesforserialize;
 
 public class Adress {
     public String city;
-    private int postalCode;
+    public int postalCode;
 
     public Adress(String city, int postalCode) {
         this.city = city;

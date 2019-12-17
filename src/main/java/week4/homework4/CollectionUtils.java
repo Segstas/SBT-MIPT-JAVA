@@ -31,7 +31,7 @@ public class CollectionUtils {
     }
 
 
-    public static <T> boolean containsAll(List<? super T> c1, List<? extends T> c2) {
+    public static <T> boolean containsAll(List<T> c1, List<? extends T> c2) {
         for (T elem : c2) {
             if (!c1.contains(elem)) {
                 return false;
@@ -40,7 +40,7 @@ public class CollectionUtils {
         return true;
     }
 
-    public static <T> boolean containsAny(List<? super T> c1, List<? extends T> c2) {
+    public static <T> boolean containsAny(List<T> c1, List<? extends T> c2) {
         for (T elem : c2) {
             if (c1.contains(elem)) {
                 return true;

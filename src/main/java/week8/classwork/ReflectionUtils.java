@@ -11,15 +11,15 @@ import static java.util.stream.Collectors.toList;
 
 public class ReflectionUtils {
 
-    public static List<Field> collectionFieldName(Object object) {
+    private static List<Field> collectionFieldName(Object object) {
         return Arrays.asList(object.getClass().getDeclaredFields());
     }
 
-    public static List<Method> collectionMethodName(Object object) {
+    private static List<Method> collectionMethodName(Object object) {
         return Arrays.asList(object.getClass().getDeclaredMethods());
     }
 
-    public static List<String> collectionMemberName(List<? extends Member> memberList, Predicate<String> stringPredicate) {
+    private static List<String> collectionMemberName(List<? extends Member> memberList, Predicate<String> stringPredicate) {
         return memberList.stream()
                 .map(Member::getName)
                 .filter(stringPredicate)

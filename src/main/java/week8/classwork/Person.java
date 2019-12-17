@@ -1,3 +1,5 @@
+package week8.classwork;
+
 public class Person {
     public final int age;
     public final String name;
